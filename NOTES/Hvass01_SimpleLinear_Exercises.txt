@@ -1,0 +1,54 @@
+Exercises for Hvass TensorFlow
+Tutorial 01 - Simple Linear Model
+
+1. Learning Rate:
+	Larger learning rate may decrease the accuracy due to error divergence,
+	i.e. 92% for 0.1, while 77% for 7.
+
+2. Change optimizer from Gradient Descent to AdagradOptimizer and AdamOptimizer
+	In conclusion, both method provides calculation to IMPROVE the LEARNING RATE by using PROXIMAL function.
+		Which will make the optimization a lot EFFICIENT, and EASE us in CHOOSING the best learning rate!
+	1. AdagradOptimizer:	Implements Adagrad Algorithm
+		Similar with Adam (Adam combines advantages from Adagrad with RMSProp's).
+			To simplify, it's Adam with beta1 = 0 and infinitesimal (1-beta2)
+		RESULTS:
+			The weights plots show more similar "filter" to how human interpret a hand-written number.
+			Accuracy = around 82%
+	2. AdamOptimizer:	Implements Adam Algorithm.
+		Adam = Adaptive Moment Estimation
+		Method for EFFICIENT stochastic optimization that only requires first-order gradients with LITTLE MEMORY req.
+		Computes individual ADAPTIVE learning rates for DIFFERENT parameters,
+			from estimates of FIRST and SECOND moments of the gradients.
+		RESULTS:
+			The weights plots show more similar "filter" to how human interpret a hand-written number.
+			Accuracy = around 92%
+
+	Conclusion: Both method shows better filter interpretation from their weights plots, however the accuracy is lower
+		than SGD's. Maybe, it's because both method is more suitable with sparse error function. Thus, will perform
+		better within much complex model, such as using more layer.
+		Overall, Adam is better than Adagrad, since it's an improvement method after all.
+
+3. Changing Batch Size
+	Larger batch size, means heavier computation (took more time!)
+	Accuracy using SGD optimizer:
+		1000	= 92.4%
+		100	= 91.8%
+		10	= 89.4%
+		1	= 76.5%
+	The trend also occurs for Adam and Adagrad optimizer.
+	Conclusion: larger batch size means longer computational duration but higher accuracy,
+		However the trend isn't linear. Hence, we need to find the BEST batch size
+		which produce the most EFFECTIVE result.
+
+4. Do these changes will have the same effect to other classification problems and mathematical models?
+	YES, because it's a general causality since we're changing the principal variables.
+	However, for optimization method may show different effect. Since different model means different error function.
+		While Adam and Adagrad will perform MUCH BETTER for function SPARSE gradient!
+
+5. Does the result is consistent, if we run the same notebook multiple times?
+	NO, because it provides trivial solution since we're using statistic!
+
+6. Sparse softmax cross entropy vs Softmax cross entropy v2
+	The results are the same accuracy! Difference only in creating the function!
+	Since it doesn't use one hot encoded, calculation can be done directly using the corresponding labels!
+		However, the calculation of logits still produces one hot encoding

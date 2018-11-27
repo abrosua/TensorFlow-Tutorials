@@ -1,0 +1,108 @@
+Exercises for Hvass TensorFlow
+Tutorial 02 - Convolutional Neural Network
+
+*TIPS:	1. Variable	: Things that we want tensorflow to calculate or determine for us (initialized as truncated normal!)
+		i.e. Weights, biases
+	2. Placeholder	: Things that we will put to the tensorflow, data that we want to throw in
+		i.e. X, Y_true, Y_true_class
+
+*PROCEDURE:	1. Define variables and placeholders.
+			It's recommended to create functions that'll produce weight or bias
+		2. Define the NN architecture, it's better to be as a function
+		3. Define the loss function and subroutine to calculate accuracy
+		4. Define the optimizer
+		------------------ Computational Graph is Finished ------------------
+		5. Define the session!
+			Create a function for with, it has to include:
+				1. Looping iteration
+				2. Feed dictionary: X and Y_true for corresponding batch size!
+					this will be feed to the training session!
+
+1. Multiple run problems
+	Result will be different because we're using SGD, and random weights!
+	STATISTICAL problem
+
+2. Extra 10.000 iteration
+	Higher accuracy!
+
+3. Different learning rate (for 1000 iterations)
+	1e-00	: 10.1%
+	1e-02	: 97.6%
+	1e-04	: 93.8% (default)
+	1e-06	: 21.1%
+	If the learning rate is too large, the optimization might be diverging.
+		On the other hand, it won't reach the Optimum point if it's too small, since the step is very small.
+		Both resulting with tiny accuracy
+	However, for 1e-02 might be more suitable than 1e-04 if we're using 1000 iterations,
+		However for larger iterations (10.000) 1e-04 might be better. It's because the relation of step size
+		and its number of steps taken to reach the optimum point!
+
+4. Change the layer configuration (1000 iterations):
+	1. Number of conv. filters
+		16 and 36 (def)	: 93.5% 02:30
+		24 and 36	: 94.1% 03:05
+		36 and 36	: 94.5% 03:40
+		54 and 36	: 94.4% 05:19
+		36 and 16	: 93.4% 03:43
+	2. Filter size
+		5 and 5 (def)	: 93.5% 02:30
+		10 and 10	: 94.6% 05:58
+		10 and 5	: 
+		5 and 10	: 
+	3. Number of FC neurons
+		64 		: 92.7% 02:08
+		128 (def)	: 93.5% 02:30
+		256		: 
+		512		: 
+	Conclusion:	1. Larger convolutional filters, filter size or number of neurons
+				means heavier computation. Take longer time to solve!
+		
+5. Add dropout layer after the FC layer
+	default config.		: 93.5% 02:30
+	pkeep = 0.25		: 90.6% 02:12
+	pkeep = 0.5		: 92.2% 02:21
+	pkeep = 0.75		: 93.0% 02:21 
+	*NOTE: the training accuracy will drop significantly while using dropout!
+		Lower pkeep, means lower training accuracy since more neuron is getting shut down!
+		since we shut down some of the neuron.
+	However, this problem is already solved by disabling the dropout while calculating training accuracy.
+	
+	The test accuracy my not be getting better, however we need to check the overfitting furtherly
+		either the model is overfitted at the first place or not.
+
+   (+) TASK: CREATE ACCURACY vs ITERATION and LOSS vs ITERATION curve, to ANALYZE the OVERFITTING PROBLEM!
+
+6. Change the order of ReLU and Max-pooling layer; vary with sigmoid and average-pooling
+	Max-pool + ReLU	(def.)	: 93.9% 02:12
+	ReLU + Max-pool		: 93.6% 02:05
+	Avg-pool + sigmoid	: 34.8% 02:11
+	sigmoid + avg-pool	: 55.9% 02:05
+	*ANALYSIS	: Max-pool and ReLU order is interchangeable, since both will produce
+		the same result! It's because ReLU only takes account on positive value, and doesn't really change it
+		Hence, using max-pool doesn't really affect the accuracy.
+		HOWEVER, by using max-pooling first, the amount of calculation done by ReLU can be compressed
+			on the other hand, using ReLU first doesn't really has significant change in calculating max-pool
+
+		For average-pooling and sigmoid AREN'T INTERCHANGEABLE, since both calculation will produce different
+			effect if the order is changed!
+
+7. Add more convolutional and FC layer! Also, try not use pooling, and use 2x2 stride convolution instead!
+	conv1	: 6
+	conv2	: 12
+	conv3	: 24
+	FC1	: [-1, 200]
+	FC2	: [200, 10]	
+	RESULTS
+		no dropout		: 90.2% 01:31
+		w/ dropout		: 90.5% 01:30
+		no-pool + 1x1 stride	: 96.0% 06:00
+		no-pool + 2x2 stride	: 90.5% 00:29
+			10.000 iter	: 97.1% 04:57
+		default (10.000 iter)	: 98.7% 20:30
+
+8. Try use ReLU in the last FC
+	RESULTS
+		Without	: 97.1% 04:57
+		With	: 97.3% 04:54
+
+9. REMAKE THE PROGRAM!
